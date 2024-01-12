@@ -4,5 +4,6 @@ from cookbook.views import ListCreateCookbookView, RetrieveUpdateDeleteCookbookV
 
 urlpatterns = [
     path("", ListCreateCookbookView.as_view()),
-    path("<int:pk>/", RetrieveUpdateDeleteCookbookView.as_view())
+    path("<int:pk>/", RetrieveUpdateDeleteCookbookView.as_view()),
+    path("own/", ListCreateCookbookView.as_view())
 ]

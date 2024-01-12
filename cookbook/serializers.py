@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from cookbook.models import Cookbook
 from recipe.serializers import RecipeSerializer
+
+User = get_user_model()
 
 
 class OwnerSerializer(serializers.ModelSerializer):
@@ -12,12 +14,16 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 
 class CookbookSerializer(serializers.ModelSerializer):
-    recipes = RecipeSerializer(many=True)
-    owner = OwnerSerializer()
-
     class Meta:
         model = Cookbook
         fields = ["id", "title", "description", "created", "updated", "owner", "recipes"]
+        read_only_fields = ["owner"]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["owner"] = OwnerSerializer(instance.owner).data
+        representation["recipes"] = RecipeSerializer(instance.recipes, many=True).data
+        return representation
 
 
 class CreateCookbookSerializer(serializers.ModelSerializer):

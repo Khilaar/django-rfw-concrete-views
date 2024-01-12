@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'user.User'
+
 
 # Application definition
 
@@ -40,11 +42,13 @@ INSTALLED_APPS = [
 
     # 3rd party apps
     "rest_framework",
+    "drf_yasg",
 
     # My Apps
     "cookbook",
     "recipe",
     "registration_profile",
+    "user"
 ]
 
 MIDDLEWARE = [
@@ -142,4 +146,17 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=5)
+}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,  # Change settings to True to enable Django Login option
+    'LOGIN_URL': 'admin/',  # URL For Django Login
+    'LOGOUT_URL': 'admin/logout/',  # URL For Django Logout
+    'SECURITY_DEFINITIONS': { # Allows usage of Access token to make requests on the docs.
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
